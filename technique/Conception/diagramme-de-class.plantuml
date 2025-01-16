@@ -1,0 +1,84 @@
+@startuml
+left to right direction
+
+title E-commerce System Design
+
+' Define the Utilisateur (User) class with role as an attribute
+class Utilisateur {
+    +id: Int
+    +nom: String
+    +email: String
+    +role: String "Utilisateur"
+    +created_at: timestamp
+    +updated_at: timestamp
+}
+
+' Define the Administrator class which extends Utilisateur
+class Administrator {
+    +id: Int
+    +nom: String
+    +email: String
+    +role: String "Administrator"
+    +created_at: timestamp
+    +updated_at: timestamp
+}
+
+' Define the Product class with attributes related to product information
+class Product {
+    +id: Int
+    +name: String
+    +description: String
+    +price: Float
+    +quantity: Int
+    +category_id: Int
+    +created_at: timestamp
+    +updated_at: timestamp
+}
+
+' Define the Category class to organize products
+class Category {
+    +id: Int
+    +name: String
+    +description: String
+    +created_at: timestamp
+    +updated_at: timestamp
+}
+
+' Define the Order class for handling user purchases
+class Order {
+    +id: Int
+    +user_id: Int
+    +total_price: Float
+    +status: String "Pending, Completed, Canceled"
+    +created_at: timestamp
+    +updated_at: timestamp
+}
+
+' Define the OrderItem class for managing products in an order
+class OrderItem {
+    +id: Int
+    +order_id: Int
+    +product_id: Int
+    +quantity: Int
+    +price: Float
+    +created_at: timestamp
+    +updated_at: timestamp
+}
+
+' Define the relationships between classes
+
+' Administrator can create and manage products
+Administrator "1" -- "*" Product : "Create/Manage"
+
+' Utilisateur can place orders
+Utilisateur "1" -- "*" Order : "Place"
+Utilisateur "1" -- "*" OrderItem : "Includes"
+
+' Order contains OrderItems with products
+Order "1" -- "*" OrderItem : "Contains"
+OrderItem "1" -- "*" Product : "References"
+
+' Products are classified under categories
+Product "1" -- "*" Category : "Belongs to"
+
+@enduml
