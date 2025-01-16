@@ -1,0 +1,33 @@
+@startuml
+left to right direction
+
+actor User
+actor Admin
+
+rectangle "Blog System" {
+    (View Specific Article) as UC1
+    (View All Articles) as UC2
+    (Authenticate User) as UC3
+    (Add Comments) as UC4
+    (Cannot Access Dashboard) as UC5
+    (Authenticate Admin) as UC6
+    (Access Dashboard) as UC7
+    (Manage Tags) as UC8
+    (Manage Categories) as UC9
+    (CRUD Articles) as UC10
+    (Manage Comments) as UC11
+
+    User --- UC1
+    User --- UC2
+    User --- UC3
+    User --- UC4
+    User --- UC5
+
+    Admin --- UC6
+    Admin --- UC7
+    Admin --- UC8
+    Admin --- UC9
+    Admin --- UC10
+    Admin --- UC11
+}
+@enduml
