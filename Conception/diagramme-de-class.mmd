@@ -1,0 +1,35 @@
+classDiagram
+    class User {
+        +id
+        +name
+        +email
+        +password
+    }
+
+    class Article {
+        +id
+        +title
+        +content
+        +userId
+        +categoryId
+        +tags
+    }
+
+    class Comment {
+        +id
+        +content
+        +userId
+        +articleId
+    }
+
+    class Tag {
+        +id
+        +name
+    }
+
+    class Category {
+        +id
+        +name
+    }
+
+   
