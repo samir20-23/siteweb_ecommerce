@@ -1,84 +1,251 @@
 @startuml
 left to right direction
 
-title E-commerce System Design
+title E-commerce System - Separate Admin and User Class Diagram
 
-' Define the Utilisateur (User) class with role as an attribute
-class Utilisateur {
-    +id: Int
-    +nom: String
-    +email: String
-    +role: String "Utilisateur"
-    +created_at: timestamp
-    +updated_at: timestamp
+' User Class
+class User {
+  +id: int
+  +name: string
+  +email: string
+  +password: string
+  +address: string
+  +role: string   ' Role column to distinguish Admin and User
+  +phone: string
+  +register(): void
+  +login(): void
+  +updateProfile(): void
 }
 
-' Define the Administrator class which extends Utilisateur
-class Administrator {
-    +id: Int
-    +nom: String
-    +email: String
-    +role: String "Administrator"
-    +created_at: timestamp
-    +updated_at: timestamp
+' Admin Class (inherits User)
+class Admin {
+  +id: int
+  +email: string
+  +role: string
+  +manageProducts(): void
+  +manageOrders(): void
 }
 
-' Define the Product class with attributes related to product information
+' Product Class
 class Product {
-    +id: Int
-    +name: String
-    +description: String
-    +price: Float
-    +quantity: Int
-    +category_id: Int
-    +created_at: timestamp
-    +updated_at: timestamp
+  +id: int
+  +name: string
+  +description: string
+  +price: float
+  +stock: int
 }
 
-' Define the Category class to organize products
+' Category Class
 class Category {
-    +id: Int
-    +name: String
-    +description: String
-    +created_at: timestamp
-    +updated_at: timestamp
+  +id: int
+  +name: string
+  +description: string
 }
 
-' Define the Order class for handling user purchases
-class Order {
-    +id: Int
-    +user_id: Int
-    +total_price: Float
-    +status: String "Pending, Completed, Canceled"
-    +created_at: timestamp
-    +updated_at: timestamp
+' Commande Class (Order)
+class Commande {
+  +id: int
+  +userId: int
+  +status: string
+  +date: DateTime
 }
 
-' Define the OrderItem class for managing products in an order
+' OrderItem Class (Items within Order)
 class OrderItem {
-    +id: Int
-    +order_id: Int
-    +product_id: Int
-    +quantity: Int
-    +price: Float
-    +created_at: timestamp
-    +updated_at: timestamp
+  +id: int
+  +commandeId: int
+  +productId: int
+  +quantity: int
+  +price: float
 }
 
-' Define the relationships between classes
+' Cart Class
+class Cart {
+  +id: int
+  +userId: int
+  +addProduct(productId: int, quantity: int): void
+  +removeProduct(productId: int): void
+  +clearCart(): void
+}
 
-' Administrator can create and manage products
-Administrator "1" -- "*" Product : "Create/Manage"
+' CartItem Class (Items within Cart)
+class CartItem {
+  +id: int
+  +cartId: int
+  +productId: int
+  +quantity: int
+}
 
-' Utilisateur can place orders
-Utilisateur "1" -- "*" Order : "Place"
-Utilisateur "1" -- "*" OrderItem : "Includes"
+' Review Class (Product Review)
+class Review {
+  +id: int
+  +productId: int
+  +userId: int
+  +rating: int
+  +comment: string
+  +addReview(): void
+  +updateReview(): void
+  +deleteReview(): void
+}
 
-' Order contains OrderItems with products
-Order "1" -- "*" OrderItem : "Contains"
-OrderItem "1" -- "*" Product : "References"
+' Contact Class (Messages)
+class Contact {
+  +id: int
+  +userId: int
+  +message: string
+  +contactDate: DateTime
+  +sendMessage(): void
+}
 
-' Products are classified under categories
-Product "1" -- "*" Category : "Belongs to"
+' Relationships
+
+' Admin manages Products and Orders
+Admin "1" --> "*" Product : manages
+Admin "1" --> "*" Commande : manages
+
+' User places Orders, adds products to Cart, writes Reviews, and sends Contact messages
+User "1" --> "*" Commande : places
+User "1" --> "*" Cart : owns
+User "1" --> "*" Review : writes
+User "1" --> "*" Contact : sends
+
+' Product belongs to Category, and has OrderItems, CartItems, and Reviews
+Product "1" --> "*" OrderItem : included in
+Product "1" --> "*" CartItem : added to
+Product "1" --> "*" Review : has
+Product "1" --> "*" Category : belongs to
+
+' Commande includes OrderItems
+Commande "1" --> "*" OrderItem : includes
+
+' Cart contains CartItems
+Cart "1" --> "*" CartItem : contains
 
 @enduml
+
+
+' @startuml
+' left to right direction
+
+' title E-commerce System - Merged Admin and User Class Diagram with Relationships
+
+' ' User Class
+' class User {
+'   +id: int
+'   +name: string
+'   +email: string
+'   +password: string
+'   +address: string
+'   +role:string
+'   +phone: string
+'   +register(): void
+'   +login(): void
+'   +updateProfile(): void
+' }
+
+' ' Admin Class (inherits User)
+' class Admin {
+' +id:int
+' +email:email
+' +role:role
+' +..
+' +...
+' +...
+' }
+
+' ' Product Class
+' class Product {
+'   +id: int
+'   +name: string
+'   +description: string
+'   +price: float
+'   +stock: int
+' }
+
+' ' Category Class
+' class Category {
+'   +id: int
+'   +name: string
+'   +description: string
+' }
+
+' ' Commande Class (Order)
+' class Commande {
+'   +id: int
+'   +userId: int
+'   +status: string
+'   +date: DateTime
+' }
+
+' ' OrderItem Class (Items within Order)
+' class OrderItem {
+'   +id: int
+'   +commandeId: int
+'   +productId: int
+'   +quantity: int
+'   +price: float
+' }
+
+' ' Cart Class
+' class Cart {
+'   +id: int
+'   +userId: int
+'   +addProduct(productId: int, quantity: int): void
+'   +removeProduct(productId: int): void
+'   +clearCart(): void
+' }
+
+' ' CartItem Class (Items within Cart)
+' class CartItem {
+'   +id: int
+'   +cartId: int
+'   +productId: int
+'   +quantity: int
+' }
+
+' ' Review Class (Product Review)
+' class Review {
+'   +id: int
+'   +productId: int
+'   +userId: int
+'   +rating: int
+'   +comment: string
+'   +addReview(): void
+'   +updateReview(): void
+'   +deleteReview(): void
+' }
+
+' ' Contact Class (Messages)
+' class Contact {
+'   +id: int
+'   +userId: int
+'   +message: string
+'   +contactDate: DateTime
+'   +sendMessage(): void
+' }
+
+' ' Relationships
+
+' ' Admin manages Products and Orders
+' Admin "1" --> "*" Product : manages
+' Admin "1" --> "*" Commande : manages
+
+' ' User places Orders, adds products to Cart, writes Reviews, and sends Contact messages
+' User "1" --> "*" Commande : places
+' User "1" --> "*" Cart : owns
+' User "1" --> "*" Review : writes
+' User "1" --> "*" Contact : sends
+
+' ' Product belongs to Category, and has OrderItems, CartItems, and Reviews
+' Product "1" --> "*" OrderItem : included in
+' Product "1" --> "*" CartItem : added to
+' Product "1" --> "*" Review : has
+' Product "1" --> "*" Category : belongs to
+
+' ' Commande includes OrderItems
+' Commande "1" --> "*" OrderItem : includes
+
+' ' Cart contains CartItems
+' Cart "1" --> "*" CartItem : contains
+
+' @enduml

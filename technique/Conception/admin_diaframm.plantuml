@@ -1,0 +1,30 @@
+@startuml
+left to right direction
+
+title E-commerce System - Simple Administrator Diagram
+
+class Administrator {
+  +id: int
+  +name: string
+  +email: string
+  +password: string
+}
+
+class Product {
+  +id: int
+  +name: string
+  +price: float
+  +stock: int
+  +categoryId: int
+}
+
+class Category {
+  +id: int
+  +name: string
+}
+
+Administrator "1" -- "*" Product : adds/edits
+Administrator "1" -- "*" Category : creates/edits
+Category "1" -- "*" Product : has
+
+@enduml

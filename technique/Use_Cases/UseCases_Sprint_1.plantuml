@@ -1,9 +1,9 @@
 @startuml
 left to right direction
 
-title E-commerce System Use Case
+title E-commerce System - Use Case Diagram
 
-actor Utilisateur as "User"
+actor User as "User"
 actor Administrator as "Administrator"
 
 rectangle "E-commerce System" {
@@ -13,15 +13,21 @@ rectangle "E-commerce System" {
     (Place Order)
     (Manage Products)
     (Manage Categories)
+    (View Orders)
+    (Update Profile)
+    (Manage Users)
 }
 
 ' Relationships between actors and use cases
-Utilisateur -- (Browse Products)
-Utilisateur -- (View Product Details)
-Utilisateur -- (Add Product to Cart)
-Utilisateur -- (Place Order)
+User -- (Browse Products)
+User -- (View Product Details)
+User -- (Add Product to Cart)
+User -- (Place Order)
+User -- (Update Profile)
 
 Administrator -- (Manage Products)
 Administrator -- (Manage Categories)
+Administrator -- (Manage Users)
+Administrator -- (View Orders)
 
 @enduml
