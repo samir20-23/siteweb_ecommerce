@@ -1,0 +1,82 @@
+classDiagram
+    direction LR
+
+    class User {
+        +id: int
+        +name: string
+        +email: string
+        +password: string
+        +address: string
+        +phone: string
+        +register()
+        +login()
+        +updateProfile()
+    }
+
+    class Product {
+        +id: int
+        +name: string
+        +description: string
+        +price: float
+        +stock: int
+        +categoryId: int
+        +addStock()
+        +reduceStock()
+    }
+
+    class Category {
+        +id: int
+        +name: string
+        +description: string
+    }
+
+    class Commande {
+        +id: int
+        +userId: int
+        +productId: int
+        +quantity: int
+        +status: string
+        +date: DateTime
+        +placeOrder()
+        +cancelOrder()
+    }
+
+    class Contact {
+        +id: int
+        +userId: int
+        +commandeId: int
+        +message: string
+        +contactDate: DateTime
+        +sendMessage()
+    }
+
+    class Cart {
+        +id: int
+        +userId: int
+        +productId: int
+        +quantity: int
+        +addProduct()
+        +removeProduct()
+        +clearCart()
+    }
+
+    class Review {
+        +id: int
+        +productId: int
+        +userId: int
+        +rating: int
+        +comment: string
+        +addReview()
+        +updateReview()
+        +deleteReview()
+    }
+
+    User "1" -- "*" Commande : places
+    User "1" -- "*" Cart : owns
+    User "1" -- "*" Review : writes
+    User "1" -- "*" Contact : initiates
+    Product "1" -- "*" Commande : included in
+    Product "1" -- "*" Cart : added to
+    Product "1" -- "*" Review : has
+    Category "1" -- "*" Product : belongs to
+    Commande "1" -- "*" Contact : associated with
